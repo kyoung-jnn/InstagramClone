@@ -24,6 +24,7 @@ var imgs = [
   require('../../src/p5.jpg'),
   require('../../src/p6.jpg'),
   require('../../src/p7.jpg'),
+];
 
 class HomeTab extends Component {
   static navigationOptions = {
