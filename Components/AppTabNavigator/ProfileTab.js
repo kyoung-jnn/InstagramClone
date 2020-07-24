@@ -11,7 +11,19 @@ import {
   Thumbnail,
 } from 'native-base';
 
-import {View, Text, StyleSheet, Image} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
+import CardComponent from '../CardComponent';
+
+var {width, height} = Dimensions.get('window');
+
+var imgs = [
+  require('../../src/p1.jpg'),
+  require('../../src/p2.jpg'),
+  require('../../src/p3.jpg'),
+  require('../../src/p4.jpg'),
+  require('../../src/p5.jpg'),
+  require('../../src/p6.jpg'),
+  require('../../src/p7.jpg'),
 
 class HomeTab extends Component {
   static navigationOptions = {
@@ -19,6 +31,54 @@ class HomeTab extends Component {
       <Icon name="person" style={{color: tintColor}} />
     ),
   };
+
+  state = {
+    activeBtn: 1,
+  };
+
+  btnClickEventHandler = (index) => {
+    this.setState({
+      activeBtn: index,
+    });
+  };
+
+  bottomSection = (section) => {
+    switch (section) {
+      case 1: {
+        return (
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            {this.loadPhotoSection()}
+          </View>
+        );
+      }
+      case 2: {
+        return (
+          <View>
+            <View>
+              <CardComponent imgSrc="1" likes="100" />
+              <CardComponent imgSrc="2" likes="36" />
+              <CardComponent imgSrc="3" likes="240" />
+            </View>
+          </View>
+        );
+      }
+    }
+  };
+
+  loadPhotoSection = () => {
+    return imgs.map((image, index) => {
+      return (
+        <View key={index} style={[{width: width / 3}, {height: width / 3}]}>
+          <Image
+            source={image}
+            style={{flex: 1, width: undefined, height: undefined}}></Image>
+        </View>
+      );
+    });
+  };
+
+  loadTagSection = () => {};
+
   render() {
     return (
       <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -45,7 +105,12 @@ class HomeTab extends Component {
               <View style={{flex: 1.2, alignItems: 'center'}}>
                 <Thumbnail
                   source={require('../../src/p1.jpg')}
-                  style={{width: 100, height: 100, borderRadius: 50, marginLeft:20}}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 50,
+                    marginLeft: 20,
+                  }}
                 />
               </View>
               <View style={{flex: 3}}>
@@ -53,7 +118,7 @@ class HomeTab extends Component {
                   style={{
                     flexDirection: 'row',
                     justifyContent: 'space-around',
-                    marginVertical: 25
+                    marginVertical: 25,
                   }}>
                   <View style={{alignItems: 'center'}}>
                     <Text style={{fontSize: 20, fontWeight: 'bold'}}>30</Text>
@@ -89,6 +154,29 @@ class HomeTab extends Component {
               </Button>
             </View>
           </View>
+          {/* 프로필 하단부 */}
+          <View style={styles.bottomButton}>
+            <Button transparent onPress={() => this.btnClickEventHandler(1)}>
+              <Icon
+                name="ios-apps-outline"
+                style={[
+                  this.state.activeBtn == 1
+                    ? {color: 'black'}
+                    : {color: '#bdc3c7'},
+                ]}></Icon>
+            </Button>
+            <Button transparent onPress={() => this.btnClickEventHandler(2)}>
+              <Icon
+                name="tag"
+                type="SimpleLineIcons"
+                style={[
+                  this.state.activeBtn == 2
+                    ? {color: 'black'}
+                    : {color: '#bdc3c7'},
+                ]}></Icon>
+            </Button>
+          </View>
+          <View>{this.bottomSection(this.state.activeBtn)}</View>
         </Content>
       </View>
     );
@@ -96,10 +184,30 @@ class HomeTab extends Component {
 }
 export default HomeTab;
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  profilePhoto: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginLeft: 20,
+  },
+  profileButton: {
+    flex: 1,
+    justifyContent: 'center',
+    height: 30,
+    marginHorizontal: 10,
+    marginTop: 10,
+  },
+  bottomButton: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    borderTopWidth: 1,
+    borderColor: '#bdc3c7',
+    marginTop: 15,
   },
 });
